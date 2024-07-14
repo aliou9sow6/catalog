@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {ProductService} from "../services/product.service";
 import {Product} from "../models/product.model";
 import {askConfirmation} from "@angular/cli/src/utilities/prompt";
@@ -9,7 +9,8 @@ import {askConfirmation} from "@angular/cli/src/utilities/prompt";
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    CommonModule
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
@@ -44,6 +45,18 @@ export class ProductsComponent implements OnInit{
         this.products.splice(index, 1);
       }
     })
+  }
+
+  handleSetPromotion(p : Product) {
+    let promo = p.promotion;
+    this.productService.setPromotion(p.id).subscribe(
+      next  => {
+        p.promotion = !promo;
+      },
+      err =>{
+        this.errorMessage = err;
+      }
+    )
   }
 
 }
