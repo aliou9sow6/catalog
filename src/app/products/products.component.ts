@@ -2,26 +2,32 @@ import {Component, OnInit} from '@angular/core';
 import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {ProductService} from "../services/product.service";
 import {Product} from "../models/product.model";
-import {askConfirmation} from "@angular/cli/src/utilities/prompt";
-
+import {FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [
     NgForOf,
     NgIf,
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
+
 export class ProductsComponent implements OnInit{
   products! : Array<Product>;
   errorMessage! : string;
-  constructor(private productService : ProductService)
+  searchFormGroup! : FormGroup;
+
+  constructor(private productService : ProductService, private fb : FormBuilder)
   { }
 
   ngOnInit(): void {
+    this.searchFormGroup = this.fb.group({
+      keyword : this.fb.control(null)
+    });
     this.handleGetAllProduct();
   }
 
@@ -59,4 +65,13 @@ export class ProductsComponent implements OnInit{
     )
   }
 
+  handleSearchProduct() {
+    let keyword = this.searchFormGroup.value.keyword;
+
+    this.productService.searchProduct(keyword).subscribe(
+      (data) => {
+        this.products = data;
+      }
+    )
+  }
 }
