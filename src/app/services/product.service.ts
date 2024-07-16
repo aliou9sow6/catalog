@@ -1,47 +1,1 @@
-import { Injectable } from '@angular/core';
-import {Observable, of, throwError} from "rxjs";
-import {Product} from "../models/product.model";
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ProductService {
-  products: Array<Product>;
-
-  constructor() {
-    this.products = [
-      { id : 1, name : "computer", price : 400, promotion : false },
-      { id : 2, name : "phone", price : 200, promotion: true },
-      { id : 3, name : "charger", price : 30, promotion: false },
-      { id : 4, name : "book", price : 10, promotion: true }
-    ]
-  }
-  public getAllProducts():Observable<Array<Product>>{
-    /*let rnd = Math.random();
-    if (rnd > 0.5)
-      return throwError(()=> new Error("internal server error"));
-    else*/
-      return of(this.products);
-  }
-
-  public deleteProduct(id : number):Observable<boolean>{
-    this.products = this.products.filter(p => p.id! = id);
-    return of(true);
-  }
-
-  public setPromotion(id : number): Observable<boolean>{
-    let product = this.products.find(p => p.id ==id);
-    if (product != undefined){
-      product.promotion = !product.promotion;
-      return of(true);
-    }else
-      return throwError(()=>new Error("Product not found"));
-  }
-
-  public searchProduct(keyword : string): Observable<Product[]>{
-    let products = this.products.filter(p => p.name.includes(keyword));
-    return of(products);
-  }
-
-
-}
+import { Injectable } from '@angular/core';import {Observable, of, throwError} from "rxjs";import {Product} from "../models/product.model";import { v4 as uuidv4 } from 'uuid';@Injectable({  providedIn: 'root'})export class ProductService {  products: Array<Product>;  constructor() {    this.products = [      { id: uuidv4(), name: "computer", price: 400, promotion: false },      { id: uuidv4(), name: "phone", price: 200, promotion: true },      { id: uuidv4(), name: "charger", price: 30, promotion: false },      { id: uuidv4(), name: "book", price: 10, promotion: true },      { id: uuidv4(), name: "tablet", price: 150, promotion: true },      { id: uuidv4(), name: "headphones", price: 50, promotion: false },      { id: uuidv4(), name: "keyboard", price: 40, promotion: true },      { id: uuidv4(), name: "monitor", price: 300, promotion: false },      { id: uuidv4(), name: "mouse", price: 25, promotion: true },      { id: uuidv4(), name: "speakers", price: 60, promotion: false },    ]  }  public getAllProducts():Observable<Array<Product>>{    /*let rnd = Math.random();    if (rnd > 0.5)      return throwError(()=> new Error("internal server error"));    else*/      return of(this.products);  }  public deleteProduct(id : string):Observable<boolean>{    this.products = this.products.filter(p => p.id! = id);    return of(true);  }  public setPromotion(id : string): Observable<boolean>{    let product = this.products.find(p => p.id ==id);    if (product != undefined){      product.promotion = !product.promotion;      return of(true);    }else      return throwError(()=>new Error("Product not found"));  }  public searchProduct(keyword : string): Observable<Product[]>{    let products = this.products.filter(p => p.name.includes(keyword));    return of(products);  }}
