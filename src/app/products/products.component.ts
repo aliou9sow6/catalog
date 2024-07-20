@@ -20,6 +20,9 @@ export class ProductsComponent implements OnInit{
   products! : Array<Product>;
   errorMessage! : string;
   searchFormGroup! : FormGroup;
+  currentPage: number = 0;
+  sizePage: number = 5;
+  totalPage: number = 0;
 
   constructor(private productService : ProductService, private fb : FormBuilder)
   { }
@@ -28,13 +31,26 @@ export class ProductsComponent implements OnInit{
     this.searchFormGroup = this.fb.group({
       keyword : this.fb.control(null)
     });
-    this.handleGetAllProduct();
+    this.handleGetPageProduct();
   }
-
+  //Return products without pagination
   public handleGetAllProduct(){
     this.productService.getAllProducts().subscribe({
       next : (data) => {
         this.products = data;
+      },
+      error : err =>{
+        this.errorMessage = err;
+      }
+    });
+  }
+  //Return products with pagination
+  public handleGetPageProduct(){
+    this.productService.getPageProducts(this.sizePage, this.currentPage).subscribe({
+      next : (data) => {
+        this.products = data.products;
+        this.totalPage = data.totalPage;
+        console.log("totalPage: "+this.totalPage);
       },
       error : err =>{
         this.errorMessage = err;
@@ -73,5 +89,10 @@ export class ProductsComponent implements OnInit{
         this.products = data;
       }
     )
+  }
+
+  nextPage(i: number) {
+    this.currentPage=i;
+    this.handleGetPageProduct();
   }
 }

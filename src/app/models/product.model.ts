@@ -4,3 +4,10 @@ export interface Product{
   price : number;
   promotion : boolean;
 }
+
+export interface PageProduct{
+  products: Product[];
+  size: number;
+  page: number;
+  totalPage: number;
+}

@@ -43,6 +43,11 @@
           </tr>
         </tbody>
       </table>
+      <ul class="nav nav-pulls">
+        <li *ngFor="let item of [].constructor(this.totalPage); let i=index">
+          <a (click)="nextPage(i)" [ngClass]="i==currentPage?'btn-info':'btn-outline-info'" class="btn ms-4 mt-2">{{i}}</a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
